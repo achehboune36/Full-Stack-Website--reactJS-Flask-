@@ -162,11 +162,11 @@ def register():
 
 ###   ADMIN  ####
 @app.route('/admin', methods=['GET'])
-#@token_required
+@token_required
 def get_all_users(current_user):
 
-	#if not current_user.admin:
-	#	return jsonify({'message' : 'Cannot perform that function!'})
+	if not current_user.admin:
+		return jsonify({'message' : 'Cannot perform that function!'})
 
 	users = Users.query.all()
 
@@ -179,11 +179,11 @@ def get_all_users(current_user):
 	return jsonify({'users' : output})
 
 @app.route('/admin/<public_id>', methods=['POST'])
-#@token_required
+@token_required
 def get_one_user(public_id):
 
-	#if not current_user.admin:
-	#	return jsonify({'message' : 'Cannot perform that function!'})
+	if not current_user.admin:
+		return jsonify({'message' : 'Cannot perform that function!'})
 
 	user = Users.query.filter_by(public_id=public_id).first()
 
@@ -238,11 +238,11 @@ def delete_user(current_user, public_id):
 
 ###   Demandeur  ####
 @app.route('/demandeur')
-#@token_required
-def get_all_brikoleurs():
+@token_required
+def get_all_brikoleurs(current_user):
 
-	#if current_user.admin or current_user.brikoleur :
-	#	return jsonify({'message' : 'Cannot perform that function!'})
+	if current_user.admin or current_user.brikoleur :
+		return jsonify({'message' : 'Cannot perform that function!'})
 
 	users = Users.query.filter_by(brikoleur=True).all()
 
@@ -271,11 +271,11 @@ def get_one_brikoleur(current_user, public_id):
 	return jsonify({'user' : user_data})
 
 @app.route('/demandeur/request/<public_id>', methods=['POST'])
-#@token_required
+@token_required
 def send_request(public_id):
 
-	#if current_user.admin or current_user.brikoleur :
-	#	return jsonify({'message' : 'Cannot perform that function!'})
+	if current_user.admin or current_user.brikoleur :
+		return jsonify({'message' : 'Cannot perform that function!'})
 	current_user = public_id
 	user = Users.query.filter_by(public_id=public_id ,admin=False , brikoleur = True).first()
 
@@ -339,11 +339,11 @@ def check_requests(current_user):
 ### Brikoleur ###
 
 @app.route('/brikoleur', methods=['GET'])
-#@token_required
-def check_requests_b():
+@token_required
+def check_requests_b(current_user):
 
-	#if not  current_user.brikoleur :
-	#	return jsonify({'message' : 'Cannot perform that function!'})
+	if not  current_user.brikoleur :
+		return jsonify({'message' : 'Cannot perform that function!'})
 
 
 	requests = Mission.query.filter_by(brikoleur_id='9bd80a1e-d4d8-4f0f-bd8e-262963f16694').all()
@@ -448,7 +448,7 @@ def reset_token(token):
 
 
 @app.route('/update_profile', methods=['POST'])
-#@token_required
+@token_required
 def update_profile(current_user):
 	data = request.get_json()
 	if 'email' in data :
