@@ -27,7 +27,9 @@ function App() {
 
 export default App;
 
-/*import React from "react";
+/*
+// animated login register buttons
+import React from "react";
 import "./App.scss";
 import { Login, Register } from "./components/login/index";
 
